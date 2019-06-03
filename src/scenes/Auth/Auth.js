@@ -1,23 +1,24 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import T from 'prop-types';
 import s from './Auth.module.scss';
 import { Header } from '../../components';
 import { routes } from '../router';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
+import Api from '../../api';
 
 function Auth () {
   return(
-    <Route path={routes.auth}>
-      <div className={s.container}>
+    <div className={s.container}>
       <Header/>
       <Switch>
-        <Route path={routes.login} component={Login} />
-        <Route path={routes.register} component={Register} />
+        {Api.Auth.isLoggedIn && <Redirect to={routes.home}/>}
+        <Route path={routes.login} component={Login} exact />
+        <Route path={routes.register} component={Register} exact />
+        <Redirect from={routes.auth} to={routes.login} />
       </Switch>
-      </div>
-    </Route>
+    </div>
   );
 };
 
